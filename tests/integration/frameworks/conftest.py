@@ -57,14 +57,15 @@ def pytest_collection_modifyitems(config: Config, items: list[Item]) -> None:
 def pytest_generate_tests(metafunc: pytest.Metafunc) -> None:
     framework_name = t.cast(str, metafunc.config.getoption("framework"))
 
-    if "framework" in metafunc.fixturenames and "test_model" in metafunc.fixturenames:
-        metafunc.parametrize(
-            "framework,test_model", generate_test_inputs(framework_name)
-        )
-    elif "framework" in metafunc.fixturenames:
-        metafunc.parametrize(
-            "framework", [inp[0] for inp in generate_test_inputs(framework_name)]
-        )
+    if "framework" in metafunc.fixturenames:
+        if "test_model" in metafunc.fixturenames:
+            metafunc.parametrize(
+                "framework,test_model", generate_test_inputs(framework_name)
+            )
+        else:
+            metafunc.parametrize(
+                "framework", [inp[0] for inp in generate_test_inputs(framework_name)]
+            )
 
 
 def generate_test_inputs(

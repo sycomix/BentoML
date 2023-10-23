@@ -91,13 +91,10 @@ def compatible_option(*param_decls: str, **attrs: t.Any):
                             opt.lstrip("--"),
                         )
                     elif isinstance(value, tuple):
-                        obsolete_format = " ".join(
-                            map(lambda s: "%s=%s" % (opt, s), value)
-                        )
+                        obsolete_format = " ".join(map(lambda s: f"{opt}={s}", value))
                         new_format = " ".join(
                             map(
-                                lambda s: "--%s %s=%s"
-                                % (equivalent[0], opt.lstrip("--"), s),
+                                lambda s: f'--{equivalent[0]} {opt.lstrip("--")}={s}',
                                 value,
                             )
                         )

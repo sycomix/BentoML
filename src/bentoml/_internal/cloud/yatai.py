@@ -880,13 +880,13 @@ class YataiClient(CloudClient):
             model = None
         else:
             if _tag.version not in (None, "latest"):
-                if not force:
+                if force:
+                    model_store.delete(tag)
+                else:
                     self.log_progress.add_task(
                         f'[bold blue]Model "{tag}" already exists locally, skipping'
                     )
                     return model
-                else:
-                    model_store.delete(tag)
         yatai_rest_client = get_rest_api_client(context)
         name = _tag.name
         version = _tag.version
@@ -903,13 +903,13 @@ class YataiClient(CloudClient):
                     )
                     return model
                 if model.tag.version == latest_model.version:
-                    if not force:
+                    if force:
+                        model_store.delete(model.tag)
+                    else:
                         self.log_progress.add_task(
                             f'[bold blue]Model "{model.tag}" already exists locally, skipping'
                         )
                         return model
-                    else:
-                        model_store.delete(model.tag)
             version = latest_model.version
         elif query:
             warnings.warn(

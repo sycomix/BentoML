@@ -56,8 +56,7 @@ model, cfg = gen_model()
 
 
 def check_expected(output: list[dict[str, t.Any]]) -> bool:
-    scores = output[0]["instances"].get("scores").tolist()
-    if scores:
+    if scores := output[0]["instances"].get("scores").tolist():
         return np.testing.assert_allclose(scores[0], [1.0], rtol=1e-3)
     return True
 

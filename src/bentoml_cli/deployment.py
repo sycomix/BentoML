@@ -35,10 +35,10 @@ def add_deployment_command(cli: click.Group) -> None:
     )
 
     def shared_decorator(
-        f: t.Callable[..., t.Any] | None = None,
-        *,
-        required_deployment_name: bool = True,
-    ) -> t.Callable[..., t.Any]:
+            f: t.Callable[..., t.Any] | None = None,
+            *,
+            required_deployment_name: bool = True,
+        ) -> t.Callable[..., t.Any]:
         def decorate(f: t.Callable[..., t.Any]) -> t.Callable[..., t.Any]:
             options = [
                 click.argument(
@@ -67,10 +67,7 @@ def add_deployment_command(cli: click.Group) -> None:
                 f = opt(f)
             return f
 
-        if f:
-            return decorate(f)
-        else:
-            return decorate
+        return decorate(f) if f else decorate
 
     @cli.group(name="deployment", cls=BentoMLCommandGroup)
     def deployment_cli():

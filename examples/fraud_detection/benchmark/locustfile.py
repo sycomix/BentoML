@@ -5,7 +5,7 @@ from locust import between
 from locust import task
 
 NUM_OF_ROWS = 500
-test_transactions = pd.read_csv("../data/test_transaction.csv")[0:NUM_OF_ROWS]
+test_transactions = pd.read_csv("../data/test_transaction.csv")[:NUM_OF_ROWS]
 
 endpoint = "/is_fraud"
 # endpoint = "/is_fraud_async"

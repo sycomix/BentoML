@@ -27,10 +27,7 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-if TYPE_CHECKING:
-    ListStr = list[str]
-else:
-    ListStr = list
+ListStr = list[str] if TYPE_CHECKING else list
 
 
 class Arguments(ListStr):

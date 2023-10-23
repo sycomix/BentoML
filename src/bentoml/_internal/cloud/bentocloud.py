@@ -888,13 +888,13 @@ class BentoCloudClient(CloudClient):
             model = None
         else:
             if _tag.version not in (None, "latest"):
-                if not force:
+                if force:
+                    model_store.delete(tag)
+                else:
                     self.log_progress.add_task(
                         f'[bold blue]Model "{tag}" already exists locally, skipping'
                     )
                     return model
-                else:
-                    model_store.delete(tag)
         yatai_rest_client = get_rest_api_client(context)
         name = _tag.name
         version = _tag.version
@@ -911,13 +911,13 @@ class BentoCloudClient(CloudClient):
                     )
                     return model
                 if model.tag.version == latest_model.version:
-                    if not force:
+                    if force:
+                        model_store.delete(model.tag)
+                    else:
                         self.log_progress.add_task(
                             f'[bold blue]Model "{model.tag}" already exists locally, skipping'
                         )
                         return model
-                    else:
-                        model_store.delete(model.tag)
             version = latest_model.version
         elif query:
             warnings.warn(
@@ -1005,10 +1005,7 @@ class BentoCloudClient(CloudClient):
         if res is None:
             raise BentoMLException("List bentos request failed")
 
-        res.items = [
-            bento
-            for bento in sorted(res.items, key=lambda x: x.created_at, reverse=True)
-        ]
+        res.items = list(sorted(res.items, key=lambda x: x.created_at, reverse=True))
         return res
 
     def list_models(self, context: str | None = None) -> ModelWithRepositoryListSchema:
@@ -1017,8 +1014,5 @@ class BentoCloudClient(CloudClient):
         if res is None:
             raise BentoMLException("List models request failed")
 
-        res.items = [
-            model
-            for model in sorted(res.items, key=lambda x: x.created_at, reverse=True)
-        ]
+        res.items = list(sorted(res.items, key=lambda x: x.created_at, reverse=True))
         return res

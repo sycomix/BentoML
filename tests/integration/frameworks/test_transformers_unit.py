@@ -231,12 +231,11 @@ def fixture_pair_classification_pipeline(unload_registry: bool, tmp_path: Path):
     vocab_file = tmp_path / "vocab.txt"
     with vocab_file.open("w", encoding="utf-8") as vocab_writer:
         vocab_writer.write("".join([x + "\n" for x in vocab_tokens]))
-    classifier = pipeline(
+    yield pipeline(
         TASK_NAME,
         model=model,
         tokenizer=transformers.BertTokenizer(vocab_file.__fspath__()),
     )
-    yield classifier
     if unload_registry:
         del PIPELINE_REGISTRY.supported_tasks[TASK_NAME]
 

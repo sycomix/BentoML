@@ -399,7 +399,7 @@ def build(
 
     # Run healthcheck
     if not health(backend):
-        raise BentoMLException("Backend %s is not healthy." % backend)
+        raise BentoMLException(f"Backend {backend} is not healthy.")
 
     if "tag" not in kwargs:
         kwargs["tag"] = determine_container_tag(bento_tag, image_tag=image_tag)
